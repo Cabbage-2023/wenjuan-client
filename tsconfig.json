@@ -24,6 +24,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/components/QuestionComponent/index.tss"  ],
   "exclude": ["node_modules"]
 }

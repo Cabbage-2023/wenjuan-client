@@ -1,0 +1,19 @@
+// QuestionInput.module.scss
+.inputWrapper {
+  margin-bottom: 16px;
+  // 移除 padding: 0 5px; 除非你确定需要它
+  width: 100%; 
+
+  input {
+    width: 100%;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px; // 稍微圆润一点
+    padding: 10px 12px; // 增加高度，更符合 H5 点击体验
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: #39c5bb; // 聚焦时显示你的 Miku 绿
+    }
+  }
+}
