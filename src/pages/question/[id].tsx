@@ -6,7 +6,7 @@ import {getComponent} from '@/components/QuestionComponent';
 type PropType = {
   errno:number,
   data?:{
-    id:string,
+    _id:string,
     title:string,
     desc?:string,
     js?:string,
@@ -33,7 +33,7 @@ export default function Question(props: PropType) {
     </PageWrapper>
   }
 
-  const {id,title='',desc='',isDeleted,isPublished,componentList=[]}=data||{}
+  const {_id:id,title='',desc='',isDeleted,isPublished,componentList=[]}=data||{}
   //问卷已被删除
   if(isDeleted){
     return <PageWrapper title={title} desc={desc}>
