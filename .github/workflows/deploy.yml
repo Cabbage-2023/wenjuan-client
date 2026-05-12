@@ -19,18 +19,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/wenjuan-platform/client-c
+            git remote set-url origin git@github.com:Cabbage-2023/wenjuan-client.git || true
             
-            if [ ! -d ".git" ]; then
-              git init
-              # 这种写法更稳健：如果 origin 不存在则添加，存在则直接更新
-              git remote set-url origin https://github.com/Cabbage-2023/wenjuan-client.git || git remote add origin https://github.com/Cabbage-2023/wenjuan-client.git
-            fi
-
             [ -f .env ] && cp .env .env.bak
-            git fetch --all
-            git reset --hard origin/main
+            git fetch --all && git reset --hard origin/main
             [ -f .env.bak ] && mv .env.bak .env
-
+            
             cd ~/wenjuan-platform
-            # 对应 service 名 client-c
             docker compose up -d --build client-c
