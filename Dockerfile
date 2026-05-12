@@ -2,15 +2,20 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# 安装依赖
+# 1. 安装依赖
 COPY package*.json ./
 RUN npm config set registry https://registry.npmmirror.com && npm install
 
-# 复制源码
+# 2. 复制源码
 COPY . .
 
-# 暴露 Next.js 端口
+# 3. 核心步骤：执行生产环境构建
+# 这会将你的 Next.js 代码打包、压缩、优化，显著提升加载速度
+RUN npm run build
+
+# 4. 暴露端口
 EXPOSE 3000
 
-# 按照你的要求：不执行 build，直接运行源码 (Next.js 的开发模式)
-CMD ["npm", "run", "dev"]
+# 5. 启动生产服务器
+# 使用 start 而不是 dev，它会运行编译后的优化代码
+CMD ["npm", "run", "start"]
