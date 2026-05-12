@@ -1,0 +1,36 @@
+name: Deploy Client-C
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/wenjuan-platform/client-c
+            
+            if [ ! -d ".git" ]; then
+              git init
+              # 这种写法更稳健：如果 origin 不存在则添加，存在则直接更新
+              git remote set-url origin https://github.com/Cabbage-2023/wenjuan-client.git || git remote add origin https://github.com/Cabbage-2023/wenjuan-client.git
+            fi
+
+            [ -f .env ] && cp .env .env.bak
+            git fetch --all
+            git reset --hard origin/main
+            [ -f .env.bak ] && mv .env.bak .env
+
+            cd ~/wenjuan-platform
+            # 对应 service 名 client-c
+            docker compose up -d --build client-c
