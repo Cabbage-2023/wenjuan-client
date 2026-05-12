@@ -25,24 +25,25 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   if(req.method !== "POST"){
-    res.status(200).json({errno:-1,msg:"method 错误"})
+    res.status(405).json({errno:-1,msg:"method 错误"})
   }
   //获取并格式化表单数据，提交到服务端mock
   const answerInfo = genAnswerInfo(req.body)
-  //console.log(answerInfo)
+  console.log('收到表单数据:', answerInfo)
 
   try{
     //提交到服务端mock
     const resData=await postAnswer(answerInfo)
     if(resData.errno===0){
-      //提交成功
-      res.redirect('/success')
+      // 成功：302 重定向到成功页
+      return res.redirect(302, '/success');
     }else{
-      //提交失败
-      res.redirect('/fail')
+      // 业务错误
+      return res.redirect(302, '/fail');
     }
   }catch(err){
-    res.status(200).json({errno:-1,msg:"提交失败"})
-    res.redirect('/fail')
+    console.error(err);
+    // 运行时错误：直接跳到失败页，不要再发 json 了
+    return res.redirect(302, '/fail');
   }
 }
